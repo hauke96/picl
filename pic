@@ -10,14 +10,50 @@ library_name=
 
 # usage
 #
-# Shows the help-message
+# Shows the help-message.
 #
-# Arguments:
-# (none)
+# Arguments: 
+#   (none)
+#
+# Variables:
+#   (none)
 function usage(){
 	cat <<END
 TODO
 END
+}
+
+# parse_conf_file
+#
+# Parses the conf file and saves the entries in the global variables.
+# The config file "pic.conf" should exist.
+#
+# Arguments:
+#   (none)
+#
+# Variables:
+#   url
+#   output_folder
+function parse_conf_file(){
+	while read -r line
+		key=${line%%:*}
+		value=${line#*:}
+
+		case $key in
+			url)
+				url=$value
+				shift
+				;;
+			output_folder)
+				output_folder=$value
+				shift
+				;;
+			*)
+				echo "Unknown config entry '$line'"
+				;;
+		esac
+	do
+	done < pic.conf
 }
 
 for (( i=1; i<=$#; i++ ))
