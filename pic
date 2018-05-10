@@ -133,16 +133,20 @@ function parse_install_args(){
 # Variables:
 # (none)
 function install(){
+	echo ""
+	echo "Start installing..."
+
 	if [ ! -d "$output_folder" ]
 	then
+		echo "Folder $output_folder does not exist. I'll create it."
 		mkdir $output_folder
 	fi
+
 	meta_file="$output_folder/meta_$library_name_raw"
 	library_ext=
 
-	echo "Start installing..."
-
 	# Get meta file from server
+	echo "Get meta file..."
 	response=$(curl --write-out %{http_code} --silent --output $meta_file "$url/$library_name_raw/meta")
 
 	if [ "$response" -ne 200 ]
@@ -152,7 +156,7 @@ function install(){
 		exit 1
 	fi
 
-	# TODO get meta file and get 'ext' value
+	# Parse meta file
 	while IFS= read -r line
 	do
 		key=${line%%\:*}
@@ -177,7 +181,20 @@ function install(){
 	# TODO check if every dependency exists
 	# TODO download dependencies first
 	# TODO check if file exists
+
 	# TODO download actual library
+	library_file="$output_folder/$library_name.$library_ext"
+	echo "Get library $library_name_raw"
+	response=$(curl --write-out %{http_code} --silent --output $library_file "$url/$library_name_raw/$library_name_raw.$library_ext")
+
+	if [ "$response" -ne 200 ]
+	then
+		echo "Download library $library_name_raw failed"
+		echo "HTTP status code: $response"
+		exit 1
+	fi
+	
+	echo "Installing $library_name_raw finished"
 }
 
 # To overwrite configs made in the "pic.conf", w parse before(!) reading the CLI-arguments
