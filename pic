@@ -88,6 +88,7 @@ for (( i=1; i<=$#; i++ ))
 do
 	arg_i=${@:$i:1}   # get argument i
 	arg_j=${@:$i+1:1} # get argument i+1
+
 	case $arg_i in
 	-h|--help)
 		usage
@@ -114,20 +115,6 @@ do
 		;;
 	-l)
 		library_name=$arg_j
-		shift
-		;;
-	--library=*)
-		# split at = char and remove the shortest match from beginning
-		library_name=${arg_i#*=}
-		shift
-		;;
-	-v)
-		library_version=$arg_j
-		shift
-		;;
-	--version=*)
-		# split at = char and remove the shortest match from beginning
-		library_version=${arg_i#*=}
 		shift
 		;;
 	*)
