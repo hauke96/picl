@@ -28,20 +28,20 @@ The server must have this structure:
 
 ```
 ./
-├── bar_0-1-0
-│   ├── bar_0-1-0.jar
+├── bar@0.1.0
+│   ├── bar@0.1.0.jar
 │   └── meta
-├── bar_0-2-0
-│   ├── bar_0-2-0.jar
+├── bar@0.2.0
+│   ├── bar@0.2.0.jar
 │   └── meta
-├── bar_0-3-0
-│   ├── bar_0-3-0.jar
+├── bar@0.3.0
+│   ├── bar@0.3.0.jar
 │   └── meta
-├── foo_1-2-3
-│   ├── foo_1-2-3.jar
+├── foo@1.2.3
+│   ├── foo@1.2.3.jar
 │   └── meta
-├── foo_1-4-5
-│   ├── foo_1-4-5.jar
+├── foo@1.4.5
+│   ├── foo@1.4.5.jar
 │   └── meta
 └── info.txt
 ```
