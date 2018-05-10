@@ -81,8 +81,6 @@ function parse_install_args(){
 		arg_i=${@:$i:1}   # get argument i
 		arg_j=${@:$i+1:1} # get argument i+1
 
-		echo $arg_i
-
 		case $arg_i in
 		-h|--help)
 			usage
