@@ -45,9 +45,13 @@ function parse_conf_file(){
 		case $key in
 		url)
 			url=$value
+			# remove / at end (if none exists, nothing happens)
+			url=${url%/}
 			;;
 		output_folder)
 			output_folder=$value
+			# remove / at end (if none exists, nothing happens)
+			output_folder=${output_folder%/}
 			;;
 		\#*)
 			# Lines with a "#" at the beginning are comments
@@ -86,6 +90,8 @@ function parse_install_args(){
 			;;
 		-o)
 			output_folder=${arg_j#*./}
+			# remove / at end (if none exists, nothing happens)
+			output_folder=${output_folder%/}
 			;;
 		--output=*)
 			# split at = char and remove the shortest match from beginning
@@ -95,10 +101,14 @@ function parse_install_args(){
 			;;
 		-u)
 			url=$arg_j
+			# remove / at end (if none exists, nothing happens)
+			url=${url%/}
 			;;
 		--url=*)
 			# split at = char and remove the shortest match from beginning
 			url=${arg_i#*=}
+			# remove / at end (if none exists, nothing happens)
+			url=${url%/}
 			;;
 		*)
 			library_name_raw=$arg_i
