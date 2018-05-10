@@ -108,16 +108,12 @@ do
 		url=$arg_j
 		shift
 		;;
-	--url=http://*)
+	--url=*)
 		# split at = char and remove the shortest match from beginning
 		url=${arg_i#*=}
 		shift
 		;;
-	-l)
-		library_name=$arg_j
-		shift
-		;;
-	*)
+	-*)
 		echo "Unknown argument number $i: '$arg_i'"
 		;;
 	esac
