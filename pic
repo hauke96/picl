@@ -117,8 +117,8 @@ function parse_install_args(){
 
 	# TODO handle empty library_name_raw
 
-	library_name=${library_name_raw%%_*}
-	library_version=${library_name_raw#*_}
+	library_name=${library_name_raw%%\@*}
+	library_version=${library_name_raw#*\@}
 }
 
 # install
@@ -142,6 +142,7 @@ function install(){
 
 	meta_file="$output_folder/meta_$library_name_raw"
 	library_ext=
+	library_file=
 
 	# Get meta file from server
 	echo "Get meta file..."
