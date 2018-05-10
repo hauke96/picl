@@ -58,18 +58,75 @@ function parse_conf_file(){
 	done < "./pic.conf"
 }
 
+# parse_install_args
+#
+# Parses the args passed to the install operation.
+#
+# Arguments:
+#   @
+#
+# Variables:
+#   library_name
+#   library_version
+function parse_install_args(){
+	# Gets the library specification (including version) 
+
+	for (( i=2; i<=$#; i++ ))
+	do
+		arg_i=${@:$i:1}   # get argument i
+		arg_j=${@:$i+1:1} # get argument i+1
+
+		echo $arg_i
+
+		case $arg_i in
+		-h|--help)
+			usage
+			exit 0
+			;;
+		-o)
+			output_folder=${arg_j#*./}
+			;;
+		--output=*)
+			# split at = char and remove the shortest match from beginning
+			output_folder=${arg_i#*=}
+			# remove / at end (if none exists, nothing happens)
+			output_folder=${output_folder%/}
+			;;
+		-u)
+			url=$arg_j
+			;;
+		--url=*)
+			# split at = char and remove the shortest match from beginning
+			url=${arg_i#*=}
+			;;
+		*)
+			library_spec=$arg_i
+			break
+			;;
+		esac
+	done
+
+	# TODO handle empty library_spec
+
+	library_name=${library_spec%%_*}
+	library_version=${library_spec#*_}
+}
+
 # To overwrite configs made in the "pic.conf", w parse before(!) reading the CLI-arguments
 echo "Begin reading config"
 parse_conf_file
 echo "Finished reading config"
 
-# Get first argument which must be the operation and remove it from the list of args
+# Get first argument which must be the operation
 operation=${@:1:1}
-shift
 
 case $operation in
+-h|--help)
+	usage
+	exit 0
+	;;
 install)
-	# TODO call parse_install_args function
+	parse_install_args $@
 	# TODO call install function
 	;;
 remove)
@@ -84,41 +141,6 @@ remove)
 	;;
 esac
 
-for (( i=1; i<=$#; i++ ))
-do
-	arg_i=${@:$i:1}   # get argument i
-	arg_j=${@:$i+1:1} # get argument i+1
-
-	case $arg_i in
-	-h|--help)
-		usage
-		exit 0
-		;;
-	-o)
-		output_folder=${arg_j#*./}
-		shift
-		;;
-	--output=*)
-		# split at = char and remove the shortest match from beginning
-		output_folder=${arg_i#*=}
-		# remove / at end (if none exists, nothing happens)
-		output_folder=${output_folder%/}
-		;;
-	-u)
-		url=$arg_j
-		shift
-		;;
-	--url=*)
-		# split at = char and remove the shortest match from beginning
-		url=${arg_i#*=}
-		shift
-		;;
-	-*)
-		echo "Unknown argument number $i: '$arg_i'"
-		;;
-	esac
-done
-
 echo ""
 echo "Using the following configuration:"
 echo ""
@@ -126,3 +148,4 @@ echo "url             : $url"
 echo "output folder   : $output_folder"
 echo "library name    : $library_name"
 echo "library version : $library_version"
+echo "operation       : $operation" 
