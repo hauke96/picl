@@ -1,10 +1,10 @@
-#picki
+# picki
 This application is called *picki* and is actually just a tool to download files from an HTTP-server which offers a specific file structure.
 
-#Usecase
+# Usecase
 picki can be used to download libraries. Yeah, that's it.
 
-#The server
+# The server
 For example: You have two java libraries `foo` and `bar`. For `foo` you want to host version 1.2.3 and 1.4.5 and for `bar` you want to host the versions 0.1, 0.2 and 0.3.
 
 The server must have this structure:
