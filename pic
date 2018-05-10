@@ -7,6 +7,7 @@ output_folder=
 url=
 library_version=
 library_name=
+operatoin=
 
 # usage
 #
@@ -61,6 +62,27 @@ function parse_conf_file(){
 echo "Begin reading config"
 parse_conf_file
 echo "Finished reading config"
+
+# Get first argument which must be the operation and remove it from the list of args
+operation=${@:1:1}
+shift
+
+case $operation in
+install)
+	# TODO call parse_install_args function
+	# TODO call install function
+	;;
+remove)
+	# TODO call parse_remove_args function
+	# TODO call remove function
+	;;
+*)
+	echo ""
+	echo "Unknown operation '$operation'."
+	echo "Use '-h' or '--help' for more information."
+	exit 1
+	;;
+esac
 
 for (( i=1; i<=$#; i++ ))
 do
