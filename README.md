@@ -2,7 +2,9 @@
 This application is called *picki* and is actually just a tool to download files from an HTTP-server which offers a specific file structure.
 
 # Usage
-TODO
+
+# Installation
+Just use `pic install foo@1.2.3`.
 
 # Configuration
 The configuration is stored in a file called `pic.conf` and should be in the same folder where the `pic` command is exeuted.
