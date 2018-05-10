@@ -41,18 +41,18 @@ function parse_conf_file(){
 		value=${line#*:}
 
 		case $key in
-			url)
-				url=$value
-				;;
-			output_folder)
-				output_folder=$value
-				;;
-			\#*)
-				# Lines with a "#" at the beginning are comments
-				;;
-			+)
-				echo "Unknown config entry '$line'"
-				;;
+		url)
+			url=$value
+			;;
+		output_folder)
+			output_folder=$value
+			;;
+		\#*)
+			# Lines with a "#" at the beginning are comments
+			;;
+		+)
+			echo "Unknown config entry '$line'"
+			;;
 		esac
 	done < "./pic.conf"
 }
