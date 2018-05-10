@@ -13,19 +13,19 @@ The server must have this structure:
 ./
 ├── bar_0-1-0
 │   ├── bar_0-1-0.jar
-│   └── dependencies.json
+│   └── dependencies.txt
 ├── bar_0-2-0
 │   ├── bar_0-2-0.jar
-│   └── dependencies.json
+│   └── dependencies.txt
 ├── bar_0-3-0
 │   ├── bar_0-3-0.jar
-│   └── dependencies.json
+│   └── dependencies.txt
 ├── foo_1-2-3
 │   ├── foo_1-2-3.jar
-│   └── dependencies.json
+│   └── dependencies.txt
 ├── foo_1-4-5
 │   ├── foo_1-4-5.jar
-│   └── dependencies.json
+│   └── dependencies.txt
 └── info.txt
 ```
 
