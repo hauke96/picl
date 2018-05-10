@@ -141,12 +141,13 @@ function install(){
 	fi
 
 	meta_file="$output_folder/meta_$library_name_raw"
+	meta_url="$url/$library_name_raw/meta"
 	library_ext=
 	library_file=
 
 	# Get meta file from server
 	echo "Get meta file..."
-	response=$(curl --write-out %{http_code} --silent --output $meta_file "$url/$library_name_raw/meta")
+	response=$(curl --write-out %{http_code} --silent --output $meta_file $meta_url)
 
 	if [ "$response" -ne 200 ]
 	then
