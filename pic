@@ -112,6 +112,25 @@ function parse_install_args(){
 	library_version=${library_spec#*_}
 }
 
+# install
+#
+# Installs the library specified by the global variables
+#
+# Arguments:
+# (none)
+#
+# Variables:
+# (none)
+function install(){
+	echo "Start installing..."
+	# TODO check if file exists
+	# TODO get dependencies
+	# TODO parse dependencies
+	# TODO check if every dependency exists
+	# TODO download dependencies first
+	# TODO download actual library
+}
+
 # To overwrite configs made in the "pic.conf", w parse before(!) reading the CLI-arguments
 echo "Begin reading config"
 parse_conf_file
