@@ -7,6 +7,7 @@ output_folder=
 url=
 library_version=
 library_name=
+library_name_raw=
 operatoin=
 
 # usage
@@ -100,16 +101,16 @@ function parse_install_args(){
 			url=${arg_i#*=}
 			;;
 		*)
-			library_spec=$arg_i
+			library_name_raw=$arg_i
 			break
 			;;
 		esac
 	done
 
-	# TODO handle empty library_spec
+	# TODO handle empty library_name_raw
 
-	library_name=${library_spec%%_*}
-	library_version=${library_spec#*_}
+	library_name=${library_name_raw%%_*}
+	library_version=${library_name_raw#*_}
 }
 
 # install
@@ -122,12 +123,28 @@ function parse_install_args(){
 # Variables:
 # (none)
 function install(){
+	if [ ! -d "$output_folder" ]
+	then
+		mkdir $output_folder
+	fi
+
 	echo "Start installing..."
-	# TODO check if file exists
-	# TODO get dependencies
+
+	# Get meta file from server
+	response=$(curl --write-out %{http_code} --silent --output "$output_folder/meta_$library_name_raw" "$url/$library_name_raw/meta")
+
+	if [ "$response" -ne 200 ]
+	then
+		echo "Download meta file for $library_name in version $library_version failed"
+		echo "HTTP status code: $response"
+		exit 1
+	fi
+
+	# TODO get meta file and get 'ext' value
 	# TODO parse dependencies
 	# TODO check if every dependency exists
 	# TODO download dependencies first
+	# TODO check if file exists
 	# TODO download actual library
 }
 
@@ -136,21 +153,17 @@ echo "Begin reading config"
 parse_conf_file
 echo "Finished reading config"
 
-# Get first argument which must be the operation
-operation=${@:1:1}
-
-case $operation in
+case ${@:1:1} in
 -h|--help)
 	usage
 	exit 0
 	;;
 install)
 	parse_install_args $@
-	# TODO call install function
+	operation=install
 	;;
 remove)
-	# TODO call parse_remove_args function
-	# TODO call remove function
+	operatoin=remove
 	;;
 *)
 	echo ""
@@ -168,3 +181,15 @@ echo "output folder   : $output_folder"
 echo "library name    : $library_name"
 echo "library version : $library_version"
 echo "operation       : $operation" 
+
+# TODO check operation and start parsing, etc.
+
+case $operation in
+install)
+	install
+	;;
+remove)
+	# TODO call parse_remove_args function
+	# TODO call remove function
+	;;
+esac
