@@ -127,11 +127,13 @@ function install(){
 	then
 		mkdir $output_folder
 	fi
+	meta_file="$output_folder/meta_$library_name_raw"
+	library_ext=
 
 	echo "Start installing..."
 
 	# Get meta file from server
-	response=$(curl --write-out %{http_code} --silent --output "$output_folder/meta_$library_name_raw" "$url/$library_name_raw/meta")
+	response=$(curl --write-out %{http_code} --silent --output $meta_file "$url/$library_name_raw/meta")
 
 	if [ "$response" -ne 200 ]
 	then
@@ -141,6 +143,26 @@ function install(){
 	fi
 
 	# TODO get meta file and get 'ext' value
+	while IFS= read -r line
+	do
+		key=${line%%\:*}
+		value=${line#*:}
+
+		case $key in
+		ext)
+			library_ext=$value
+			;;
+		\#*)
+			# Lines with a "#" at the beginning are comments
+			;;
+		+)
+			echo "Unknown meta entry '$line'"
+			;;
+		esac
+	done < $meta_file
+	
+	echo "Library $library_name_raw has file extension '.$library_ext'"
+
 	# TODO parse dependencies
 	# TODO check if every dependency exists
 	# TODO download dependencies first
