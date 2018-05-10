@@ -57,6 +57,11 @@ function parse_conf_file(){
 	done < "./pic.conf"
 }
 
+# To overwrite configs made in the "pic.conf", w parse before(!) reading the CLI-arguments
+echo "Begin reading config"
+parse_conf_file
+echo "Finished reading config"
+
 for (( i=1; i<=$#; i++ ))
 do
 	arg_i=${@:$i:1}   # get argument i
