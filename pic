@@ -121,6 +121,42 @@ function parse_install_args(){
 	library_version=${library_name_raw#*\@}
 }
 
+# parse_remove_args
+#
+# Parses the args passed to the remove operation.
+#
+# Arguments:
+#   @
+#
+# Variables:
+#   library_name
+#   library_version
+function parse_remove_args(){
+	# Gets the library specification (including version) 
+
+	for (( i=2; i<=$#; i++ ))
+	do
+		arg_i=${@:$i:1}   # get argument i
+		arg_j=${@:$i+1:1} # get argument i+1
+
+		case $arg_i in
+		-h|--help)
+			usage
+			exit 0
+			;;
+		*)
+			library_name_raw=$arg_i
+			break
+			;;
+		esac
+	done
+
+	# TODO handle empty library_name_raw
+
+	library_name=${library_name_raw%%\@*}
+	library_version=${library_name_raw#*\@}
+}
+
 # install
 #
 # Installs the library specified by the global variables
@@ -238,7 +274,7 @@ install)
 	install
 	;;
 remove)
-	# TODO call parse_remove_args function
+	parse_remove_args $@
 	# TODO call remove function
 	;;
 esac
