@@ -16,6 +16,7 @@ url=
 library_version=
 library_name=
 library_name_raw=
+library_ext=
 operatoin=
 
 # usage
@@ -290,7 +291,7 @@ function install(){
 
 	parse_meta_file "$meta_file"
 
-	echo "Library $library_name_raw has file extension '.$library_ext'"
+	echo "Library $library_name_raw has file extension '$library_ext'"
 
 	# TODO parse dependencies
 	# TODO check if every dependency exists
@@ -298,9 +299,9 @@ function install(){
 	# TODO check if file exists
 
 	# TODO download actual library
-	library_file="$output_folder/$library_name_raw.$library_ext"
+	library_file="$output_folder/$library_name_raw$library_ext"
 	echo "Download library $library_name_raw"
-	response=$(curl --write-out %{http_code} --silent --output $library_file "$url/$library_name_raw/$library_name_raw.$library_ext")
+	response=$(curl --write-out %{http_code} --silent --output $library_file "$url/$library_name_raw/$library_name_raw$library_ext")
 
 	if [ "$response" -ne 200 ]
 	then
@@ -330,7 +331,7 @@ function remove(){
 
 	parse_meta_file $meta_file
 
-	library_file="$output_folder/$library_name_raw.$library_ext"
+	library_file="$output_folder/$library_name_raw$library_ext"
 
 	if [ -a $library_file ]
 	then
