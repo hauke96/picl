@@ -63,6 +63,39 @@ function parse_conf_file(){
 	done < "./pic.conf"
 }
 
+# parse_metafile
+#
+# Parses the given meta file and re-sets the global variables listed below.
+#
+# Arguments:
+#   meta_file
+#
+# Variables:
+#   library_ext
+function parse_meta_file(){
+	meta_file="$1"
+
+	echo "Parsing meta file $meta_file"
+
+	while IFS= read -r line
+	do
+		key=${line%%\:*}
+		value=${line#*:}
+
+		case $key in
+		ext)
+			library_ext=$value
+			;;
+		\#*)
+			# Lines with a "#" at the beginning are comments
+			;;
+		+)
+			echo "Unknown meta entry '$line'"
+			;;
+		esac
+	done < $meta_file
+}
+
 # parse_install_args
 #
 # Parses the args passed to the install operation.
@@ -192,25 +225,8 @@ function install(){
 		exit 1
 	fi
 
-	# Parse meta file
-	while IFS= read -r line
-	do
-		key=${line%%\:*}
-		value=${line#*:}
+	parse_meta_file "$meta_file"
 
-		case $key in
-		ext)
-			library_ext=$value
-			;;
-		\#*)
-			# Lines with a "#" at the beginning are comments
-			;;
-		+)
-			echo "Unknown meta entry '$line'"
-			;;
-		esac
-	done < $meta_file
-	
 	echo "Library $library_name_raw has file extension '.$library_ext'"
 
 	# TODO parse dependencies
@@ -244,7 +260,24 @@ function install(){
 # Variables:
 # (none)
 function remove(){
-	
+	echo ""
+	echo "Start installing..."
+
+	meta_file="$output_folder/meta_$library_name_raw"
+
+	parse_meta_file $meta_file
+
+	library_file="$output_folder/$library_name_raw.$library_ext"
+
+	if [ -a $library_file ]
+	then
+		echo "Removing library $library_name_raw"
+		rm -f $library_file
+		echo "Removing meta file $meta_file"
+		rm -f $meta_file
+	else
+		(>&2 echo "Library file $library_file does no exist")
+	fi
 }
 
 # To overwrite configs made in the "pic.conf", w parse before(!) reading the CLI-arguments
@@ -262,6 +295,7 @@ install)
 	operation=install
 	;;
 remove)
+	parse_remove_args $@
 	operation=remove
 	;;
 *)
@@ -288,7 +322,6 @@ install)
 	install
 	;;
 remove)
-	parse_remove_args $@
-	# TODO call remove function
+	remove
 	;;
 esac
