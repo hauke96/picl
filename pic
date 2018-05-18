@@ -3,6 +3,7 @@
 set -e
 
 # Default settings
+conf_file="./pic.conf"
 output_folder=
 url=
 library_version=
@@ -29,6 +30,9 @@ END
 #
 # Parses the conf file and saves the entries in the global variables.
 # The config file "pic.conf" should exist.
+# 
+# This function will NOT overwrite existing values, because CLI-arguments
+# have a higher priority then values from the config file.
 #
 # Arguments:
 #   (none)
@@ -37,6 +41,8 @@ END
 #   url
 #   output_folder
 function parse_conf_file(){
+	echo "Loading conf file $conf_file"
+
 	while IFS= read -r line
 	do
 		key=${line%%\:*}
@@ -44,14 +50,18 @@ function parse_conf_file(){
 
 		case $key in
 		url)
-			url=$value
+			_url=$value
 			# remove / at end (if none exists, nothing happens)
-			url=${url%/}
+			_url=${_url%/}
+			# set if undefined, otherwise, leave variable unchanged
+			url="${url:-$_url}"
 			;;
 		output_folder)
-			output_folder=$value
+			_output_folder=$value
 			# remove / at end (if none exists, nothing happens)
-			output_folder=${output_folder%/}
+			_output_folder=${_output_folder%/}
+			# set if undefined, otherwise, leave variable unchanged
+			output_folder=${output_folder:-$_output_folder}
 			;;
 		\#*)
 			# Lines with a "#" at the beginning are comments
@@ -60,7 +70,7 @@ function parse_conf_file(){
 			echo "Unknown config entry '$line'"
 			;;
 		esac
-	done < "./pic.conf"
+	done < $conf_file
 }
 
 # parse_metafile
@@ -119,10 +129,18 @@ function parse_install_args(){
 			usage
 			exit 0
 			;;
+		-c)
+			conf_file=$arg_j
+			((i++))
+			;;
+		--config=*)
+			conf_file=${arg_i#*=}
+			;;
 		-o)
 			output_folder=${arg_j#*./}
 			# remove / at end (if none exists, nothing happens)
 			output_folder=${output_folder%/}
+			((i++))
 			;;
 		--output=*)
 			# split at = char and remove the shortest match from beginning
@@ -134,6 +152,7 @@ function parse_install_args(){
 			url=$arg_j
 			# remove / at end (if none exists, nothing happens)
 			url=${url%/}
+			((i++))
 			;;
 		--url=*)
 			# split at = char and remove the shortest match from beginning
@@ -215,7 +234,7 @@ function install(){
 	library_file=
 
 	# Get meta file from server
-	echo "Get meta file..."
+	echo "Download meta file..."
 	response=$(curl --write-out %{http_code} --silent --output $meta_file $meta_url)
 
 	if [ "$response" -ne 200 ]
@@ -280,11 +299,6 @@ function remove(){
 	fi
 }
 
-# To overwrite configs made in the "pic.conf", w parse before(!) reading the CLI-arguments
-echo "Begin reading config"
-parse_conf_file
-echo "Finished reading config"
-
 case ${@:1:1} in
 -h|--help)
 	usage
@@ -305,6 +319,8 @@ remove)
 	exit 1
 	;;
 esac
+
+parse_conf_file
 
 echo ""
 echo "Using the following configuration:"
