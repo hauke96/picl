@@ -376,8 +376,6 @@ echo "library name    : $library_name"
 echo "library version : $library_version"
 echo "operation       : $operation" 
 
-# TODO check operation and start parsing, etc.
-
 case $operation in
 install)
 	install
@@ -385,4 +383,5 @@ install)
 remove)
 	remove
 	;;
+# TODO else cases fot unknown and not specified operations. Because of the fact that we already parsed the operation string, should this never happen
 esac
