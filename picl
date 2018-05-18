@@ -10,7 +10,7 @@ license="GPLv3"
 version="0.1"
 
 # Default settings
-conf_file="./pic.conf"
+conf_file="./picl.conf"
 output_folder="./libs"
 url=
 library_version=
@@ -30,7 +30,7 @@ operatoin=
 #   (none)
 function usage(){
 	cat <<END
-Usage: pic [OPTIONS...] {COMMAND} [OPTIONS...] {LIBRARY}
+Usage: picl [OPTIONS...] {COMMAND} [OPTIONS...] {LIBRARY}
 
 Loads and manages simple libraries and files.
 
@@ -44,10 +44,10 @@ Commands:
 Options for the "install" command (all of these are optional):
   -h, --help      Shows this help message
   -c, --config    Specifies the configuration file that should be used. This
-                  is "./pic.conf" by default.
+                  is "./picl.conf" by default.
   -o, --output    Specifies the output folder where all libraries should be
                   stored. This is "./libs" by default.
-  -u, --url       The base url where pic downloads files from.
+  -u, --url       The base url where picl downloads files from.
 
 Options for the "remove" command (all of these are optional):
   -h, --help      Shows this help message
@@ -74,7 +74,7 @@ END
 # parse_conf_file
 #
 # Parses the conf file and saves the entries in the global variables.
-# The config file "pic.conf" should exist.
+# The config file "picl.conf" should exist.
 # 
 # This function will NOT overwrite existing values, because CLI-arguments
 # have a higher priority then values from the config file.

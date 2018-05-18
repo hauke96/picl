@@ -82,7 +82,7 @@ The `ext` value should be defined, otherwise picl tries to load a file without e
 
 # --help
 ```
-Usage: pic [OPTIONS...] {COMMAND} [OPTIONS...] {LIBRARY}
+Usage: picl [OPTIONS...] {COMMAND} [OPTIONS...] {LIBRARY}
 
 Loads and manages simple libraries and files.
 
@@ -96,10 +96,10 @@ Commands:
 Options for the "install" command (all of these are optional):
   -h, --help      Shows this help message
   -c, --config    Specifies the configuration file that should be used. This
-                  is "./pic.conf" by default.
+                  is "./picl.conf" by default.
   -o, --output    Specifies the output folder where all libraries should be
                   stored. This is "./libs" by default.
-  -u, --url       The base url where pic downloads files from.
+  -u, --url       The base url where picl downloads files from.
 
 Options for the "remove" command (all of these are optional):
   -h, --help      Shows this help message
