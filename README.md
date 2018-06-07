@@ -1,3 +1,6 @@
+# Outdated README!
+This version of the README is for the old bash-script. I'm currently rewriting picl in go. The file may change until I'm finished with the reimplementation.
+
 # picl
 Picl (pick library) is just a dumb tool to download libraries of a specific version.
 
