@@ -33,7 +33,11 @@ There must be a name and there must be a version. The version is basically the s
 	app.HelpFlag.Short('h')
 	app.VersionFlag.Short('v')
 
-	app.Parse(os.Args[1:])
+	_, err := app.Parse(os.Args[1:])
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error while parsing arguments:\n%s\n", err)
+		os.Exit(1)
+	}
 
 	fmt.Println(*installPackageName)
 }
