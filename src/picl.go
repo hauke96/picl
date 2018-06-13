@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"gopkg.in/alecthomas/kingpin.v2"
+	"github.com/hauke96/kingpin"
 )
 
 var (
@@ -23,6 +23,12 @@ var (
 func main() {
 	app.Author("Hauke Stieler")
 	app.Version("0.1")
+
+	app.CustomDescription("Package Name", `This name if the library name including the version you wan't do deal with. The name has the following format:
+
+      my-library@3.5.1
+
+There must be a name and there must be a version. The version is basically the string that is behind the "@" and is not parsed. It just has to exist on the server, but the format "x.y.z" (e.g. 3.5.1) is only recommended.`)
 
 	app.HelpFlag.Short('h')
 	app.VersionFlag.Short('v')
