@@ -10,10 +10,10 @@ import (
 )
 
 var (
-	app = kingpin.New("picl", "Maybe the dumbest package manager ever")
+	app           = kingpin.New("picl", "Maybe the dumbest package manager ever")
+	appConfigFile = app.Flag("config", "Specifies the configuration file that should be used. This is \"./picl.conf\" by default.").Short('c').Default("./picl.conf").File()
 
 	installCmd          = app.Command("install", "Installs the given library")
-	installConfigFile   = installCmd.Flag("config", "Specifies the configuration file that should be used. This is \"./picl.conf\" by default.").Short('c').Default("./picl.conf").File()
 	installOutputFolder = installCmd.Flag("output", "Specifies the output folder where all libraries should be stored. This is \"./libs\" by default.").Short('o').Default("./libs/").File()
 	installUrl          = installCmd.Flag("url", "The base url where picl downloads files from").Short('u').URL()
 	installPackageName  = installCmd.Arg("package", "The library to install").String()
