@@ -37,7 +37,6 @@ func readConfig(configFile *os.File) {
 
 	pairs := make(map[string]string)
 
-	// TODO split line by : (lines starting with # are comments, blank lines can be ignored)
 	for _, line := range lines {
 		switch {
 		case configFileBlankLineRegex.MatchString(line):
@@ -83,7 +82,6 @@ func readConfig(configFile *os.File) {
 			// TODO save file
 		}
 	}
-	// TODO look for keys and save values in variables above
 }
 
 func readFile(file *os.File) ([]string, error) {
