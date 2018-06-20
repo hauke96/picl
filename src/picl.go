@@ -34,6 +34,29 @@ func setConfigFromArguments() {
 	}
 }
 
+// The output folder and remote url has to be set when installing a package. This
+// function will exit with 1 when one of those is not set.
+func handleInvalidInstallConfigs() {
+	if configOutputFolder == nil {
+		fmt.Fprintf(os.Stderr, "Output folder not set\n")
+		os.Exit(1)
+	}
+
+	if configRemoteUrl == nil {
+		fmt.Fprintf(os.Stderr, "Remote url not set\n")
+		os.Exit(1)
+	}
+}
+
+// The output folder has to be set when removing a package. This function will
+// exit with 1 when it's not set.
+func handleInvalidRemoveConfigs() {
+	if configOutputFolder == nil {
+		fmt.Fprintf(os.Stderr, "Output folder not set\n")
+		os.Exit(1)
+	}
+}
+
 func main() {
 	app.Author("Hauke Stieler")
 	app.Version("0.1")
@@ -54,15 +77,16 @@ There must be a name and there must be a version. The version is basically the s
 	}
 
 	readConfig(*appConfigFile)
-
 	setConfigFromArguments()
 
-	// TODO handle invalid/not set configurations
-
 	switch command {
+
 	case installCmd.FullCommand():
+		handleInvalidInstallConfigs()
 		cmd.Install(*installPackageName, configOutputFolder, configRemoteUrl)
+
 	case removeCmd.FullCommand():
+		handleInvalidRemoveConfigs()
 		fmt.Fprintf(os.Stderr, "Not implemented yet\n")
 	}
 }
