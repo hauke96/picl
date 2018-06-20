@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 
@@ -22,9 +23,37 @@ var (
 )
 
 func readConfig() {
-	// TODO Read lines
+	_, err := readFile()
+	if err != nil {
+		panic(err.Error())
+	}
+
 	// TODO split line by : (lines starting with # are comments, blank lines can be ignored)
 	// TODO look for keys and save values in variables above
+}
+
+func readFile() ([]string, error) {
+	lines := make([]string, 0)
+
+	// open file
+	file, err := os.Open("/path/to/file.txt")
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	// read lines
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	// return lines or error
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+
+	return lines, nil
 }
 
 func main() {
