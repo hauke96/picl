@@ -40,7 +40,7 @@ func readConfig(configFile *os.File) {
 
 	pairs := make(map[string]string)
 
-	for _, line := range lines {
+	for i, line := range lines {
 		switch {
 		case configFileBlankLineRegex.MatchString(line):
 			continue
@@ -50,8 +50,7 @@ func readConfig(configFile *os.File) {
 			splittedLine := strings.SplitN(line, ":", 2)
 
 			if len(splittedLine) != 2 {
-				// TODO handle error
-				fmt.Errorf("Lenght of splitted line was not 2\n")
+				fmt.Errorf("Parsing line %d failed. This could be an error in the regex, the splitting or the line itself", i)
 				continue
 			}
 
@@ -140,6 +139,8 @@ There must be a name and there must be a version. The version is basically the s
 	readConfig(*appConfigFile)
 
 	setConfigFromArguments()
+
+	// TODO handle invalid/not set configurations
 
 	switch command {
 	case installCmd.FullCommand():
