@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"net/url"
 	"os"
 	"regexp"
@@ -58,6 +59,11 @@ func readConfig(configFile *os.File) {
 			value := splittedLine[1]
 
 			pairs[key] = value
+		default:
+			// To print the first 20 characters of the line, we have to be careful with the bounds of this line
+			upperBound := int(math.Min(float64(len(line)), 20))
+
+			fmt.Fprintf(os.Stderr, "Malformed config-entry in line %d: %s...\n", i, line[:upperBound])
 		}
 	}
 
