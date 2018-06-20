@@ -27,6 +27,9 @@ var (
 	configFileCommentRegex   = regexp.MustCompile("^#\\s*\\S*")
 	configFileBlankLineRegex = regexp.MustCompile("^\\s*$")
 	configFileValidRegex     = regexp.MustCompile("^\\s*\\S+\\s*:\\s*\\S+\\s*$")
+
+	configOutputFolder *os.File
+	configRemoteUrl    *url.URL
 )
 
 func readConfig(configFile *os.File) {
@@ -66,8 +69,7 @@ func readConfig(configFile *os.File) {
 			fmt.Errorf("Error parsing key 'url' from config\n")
 			// TODO further error handling?
 		} else {
-			fmt.Println(urlPtr)
-			// TODO save url
+			configRemoteUrl = urlPtr
 		}
 	}
 
@@ -78,8 +80,7 @@ func readConfig(configFile *os.File) {
 			fmt.Errorf("Error parsing key 'output_folder' from config\n")
 			// TODO further error handling?
 		} else {
-			fmt.Println(filePtr.Name())
-			// TODO save file
+			configOutputFolder = filePtr
 		}
 	}
 }
@@ -104,6 +105,19 @@ func readFile(file *os.File) ([]string, error) {
 	return lines, nil
 }
 
+// When a field (e.g. configOutputFolder) is not set yet, but has been specified
+// via a command line argument, it'll be set here. Here we also overwrite
+// existing values (e.g. the remote URL).
+func setConfigFromArguments() {
+	if *installOutputFolder != nil {
+		configOutputFolder = *installOutputFolder
+	}
+
+	if *installUrl != nil {
+		configRemoteUrl = *installUrl
+	}
+}
+
 func main() {
 	app.Author("Hauke Stieler")
 	app.Version("0.1")
@@ -125,9 +139,11 @@ There must be a name and there must be a version. The version is basically the s
 
 	readConfig(*appConfigFile)
 
+	setConfigFromArguments()
+
 	switch command {
 	case installCmd.FullCommand():
-		cmd.Install(*installPackageName, *installOutputFolder, *installUrl)
+		cmd.Install(*installPackageName, configOutputFolder, configRemoteUrl)
 	case removeCmd.FullCommand():
 		fmt.Errorf("Not implemented yet\n")
 	}
