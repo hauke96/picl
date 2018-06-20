@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"net/url"
 	"os"
 	"regexp"
 	"strings"
@@ -48,7 +49,7 @@ func readConfig(configFile *os.File) {
 
 			if len(splittedLine) != 2 {
 				// TODO handle error
-				fmt.Errorf("Lenght of splitted line was not 2")
+				fmt.Errorf("Lenght of splitted line was not 2\n")
 				continue
 			}
 
@@ -59,6 +60,29 @@ func readConfig(configFile *os.File) {
 		}
 	}
 
+	if value, ok := pairs["url"]; ok {
+		urlPtr, err := url.Parse(value)
+
+		if err != nil {
+			fmt.Errorf("Error parsing key 'url' from config\n")
+			// TODO further error handling?
+		} else {
+			fmt.Println(urlPtr)
+			// TODO save url
+		}
+	}
+
+	if value, ok := pairs["output_folder"]; ok {
+		filePtr, err := os.Open(value)
+
+		if err != nil {
+			fmt.Errorf("Error parsing key 'output_folder' from config\n")
+			// TODO further error handling?
+		} else {
+			fmt.Println(filePtr.Name())
+			// TODO save file
+		}
+	}
 	// TODO look for keys and save values in variables above
 }
 
