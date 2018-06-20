@@ -21,6 +21,12 @@ var (
 	removePackageName = removeCmd.Arg("package", "The library to remove").String()
 )
 
+func readConfig() {
+	// TODO Read lines
+	// TODO split line by : (lines starting with # are comments, blank lines can be ignored)
+	// TODO look for keys and save values in variables above
+}
+
 func main() {
 	app.Author("Hauke Stieler")
 	app.Version("0.1")
@@ -39,6 +45,8 @@ There must be a name and there must be a version. The version is basically the s
 		fmt.Fprintf(os.Stderr, "Error while parsing arguments:\n%s\n", err)
 		os.Exit(1)
 	}
+
+	readConfig()
 
 	switch command {
 	case installCmd.FullCommand():
