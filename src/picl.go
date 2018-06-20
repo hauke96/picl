@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/hauke96/kingpin"
+	"github.com/hauke96/picl/src/cmd"
 )
 
 var (
@@ -33,15 +34,15 @@ There must be a name and there must be a version. The version is basically the s
 	app.HelpFlag.Short('h')
 	app.VersionFlag.Short('v')
 
-	cmd, err := app.Parse(os.Args[1:])
+	command, err := app.Parse(os.Args[1:])
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error while parsing arguments:\n%s\n", err)
 		os.Exit(1)
 	}
 
-	switch cmd {
+	switch command {
 	case installCmd.FullCommand():
-		fmt.Errorf("Not implemented yet\n")
+		cmd.Install(*installPackageName, *installOutputFolder, *installUrl)
 	case removeCmd.FullCommand():
 		fmt.Errorf("Not implemented yet\n")
 	}
