@@ -22,8 +22,8 @@ var (
 	removePackageName = removeCmd.Arg("package", "The library to remove").String()
 )
 
-func readConfig() {
-	_, err := readFile()
+func readConfig(configFile *os.File) {
+	_, err := readFile(configFile)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -32,14 +32,10 @@ func readConfig() {
 	// TODO look for keys and save values in variables above
 }
 
-func readFile() ([]string, error) {
+func readFile(file *os.File) ([]string, error) {
 	lines := make([]string, 0)
 
-	// open file
-	file, err := os.Open("/path/to/file.txt")
-	if err != nil {
-		return nil, err
-	}
+	// defer closing
 	defer file.Close()
 
 	// read lines
@@ -75,7 +71,7 @@ There must be a name and there must be a version. The version is basically the s
 		os.Exit(1)
 	}
 
-	readConfig()
+	readConfig(*appConfigFile)
 
 	switch command {
 	case installCmd.FullCommand():
