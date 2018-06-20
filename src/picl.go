@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"regexp"
+	"strings"
 
 	"github.com/hauke96/kingpin"
 	"github.com/hauke96/picl/src/cmd"
@@ -20,15 +22,43 @@ var (
 
 	removeCmd         = app.Command("remove", "Uninstalls/removes the given library")
 	removePackageName = removeCmd.Arg("package", "The library to remove").String()
+
+	configFileCommentRegex   = regexp.MustCompile("^#\\s*\\S*")
+	configFileBlankLineRegex = regexp.MustCompile("^\\s*$")
+	configFileValidRegex     = regexp.MustCompile("^\\s*\\S+\\s*:\\s*\\S+\\s*$")
 )
 
 func readConfig(configFile *os.File) {
-	_, err := readFile(configFile)
+	lines, err := readFile(configFile)
 	if err != nil {
 		panic(err.Error())
 	}
 
+	pairs := make(map[string]string)
+
 	// TODO split line by : (lines starting with # are comments, blank lines can be ignored)
+	for _, line := range lines {
+		switch {
+		case configFileBlankLineRegex.MatchString(line):
+			continue
+		case configFileCommentRegex.MatchString(line):
+			continue
+		case configFileValidRegex.MatchString(line):
+			splittedLine := strings.SplitN(line, ":", 2)
+
+			if len(splittedLine) != 2 {
+				// TODO handle error
+				fmt.Errorf("Lenght of splitted line was not 2")
+				continue
+			}
+
+			key := splittedLine[0]
+			value := splittedLine[1]
+
+			pairs[key] = value
+		}
+	}
+
 	// TODO look for keys and save values in variables above
 }
 
