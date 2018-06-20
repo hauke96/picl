@@ -51,7 +51,7 @@ func readConfig(configFile *os.File) {
 			splittedLine := strings.SplitN(line, ":", 2)
 
 			if len(splittedLine) != 2 {
-				fmt.Errorf("Parsing line %d failed. This could be an error in the regex, the splitting or the line itself", i)
+				fmt.Fprintf(os.Stderr, "Parsing line %d failed. This could be an error in the regex, the splitting or the line itself", i)
 				continue
 			}
 
@@ -71,7 +71,7 @@ func readConfig(configFile *os.File) {
 		urlPtr, err := url.Parse(value)
 
 		if err != nil {
-			fmt.Errorf("Error parsing key 'url' from config\n")
+			fmt.Fprintf(os.Stderr, "Error parsing key 'url' from config\n")
 			// TODO further error handling?
 		} else {
 			configRemoteUrl = urlPtr
@@ -82,7 +82,7 @@ func readConfig(configFile *os.File) {
 		filePtr, err := os.Open(value)
 
 		if err != nil {
-			fmt.Errorf("Error parsing key 'output_folder' from config\n")
+			fmt.Fprintf(os.Stderr, "Error parsing key 'output_folder' from config\n")
 			// TODO further error handling?
 		} else {
 			configOutputFolder = filePtr
@@ -152,6 +152,6 @@ There must be a name and there must be a version. The version is basically the s
 	case installCmd.FullCommand():
 		cmd.Install(*installPackageName, configOutputFolder, configRemoteUrl)
 	case removeCmd.FullCommand():
-		fmt.Errorf("Not implemented yet\n")
+		fmt.Fprintf(os.Stderr, "Not implemented yet\n")
 	}
 }
