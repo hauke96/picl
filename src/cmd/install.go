@@ -1,13 +1,14 @@
 package cmd
 
 import (
-	"fmt"
 	"net/url"
 	"os"
+
+	"github.com/hauke96/picl/src/log"
 )
 
 func Install(installPackageName string, outputBaseFolder *os.File, remoteBaseUrl *url.URL) {
-	fmt.Println(installPackageName)
-	fmt.Println(outputBaseFolder.Name())
-	fmt.Println(remoteBaseUrl)
+	log.Info(installPackageName)
+	log.Info(outputBaseFolder.Name())
+	log.Info(remoteBaseUrl.EscapedPath())
 }
