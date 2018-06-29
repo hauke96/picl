@@ -97,7 +97,6 @@ func main() {
 	setConfigFromArguments()
 
 	switch command {
-
 	case installCmd.FullCommand():
 		handleInvalidInstallConfigs()
 		cmd.Install(*installPackageName, configOutputFolder, configRemoteUrl)
