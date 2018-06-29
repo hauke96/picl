@@ -43,6 +43,10 @@ func Debug(message string) {
 	log(LOG_DEBUG, message)
 }
 
+func Error(message string) {
+	log(LOG_ERROR, message)
+}
+
 func log(level Level, message string) {
 	caller := getCallerDetails()
 
