@@ -2,6 +2,7 @@ package log
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"runtime"
 	"time"
@@ -19,7 +20,7 @@ var (
 	LogLevel   Level  = LOG_INFO
 	DateFormat string = "2006-01-02 15:04:05"
 
-	FormatFunctions map[Level]func(string, string, int, string, string) = map[Level]func(string, string, int, string, string){
+	FormatFunctions map[Level]func(*os.File, string, string, int, string, string) = map[Level]func(*os.File, string, string, int, string, string){
 		LOG_DEBUG: LogDefault,
 		LOG_INFO:  LogDefault,
 		LOG_ERROR: LogDefault,
@@ -32,6 +33,12 @@ var (
 		LOG_DEBUG: "[DEBUG]",
 		LOG_INFO:  "[INFO] ",
 		LOG_ERROR: "[ERROR]",
+	}
+
+	levelOutputs map[Level]*os.File = map[Level]*os.File{
+		LOG_DEBUG: os.Stdout,
+		LOG_INFO:  os.Stdout,
+		LOG_ERROR: os.Stderr,
 	}
 )
 
@@ -53,7 +60,7 @@ func log(level Level, message string) {
 	updateCallerColumnWidth(caller)
 
 	if LogLevel <= level {
-		FormatFunctions[level](time.Now().Format(DateFormat), levelStrings[level], CallerColumnWidth, caller, message)
+		FormatFunctions[level](levelOutputs[level], time.Now().Format(DateFormat), levelStrings[level], CallerColumnWidth, caller, message)
 	}
 }
 
@@ -84,10 +91,10 @@ func getCallerDetails() string {
 	return caller
 }
 
-func LogDefault(time, level string, maxLength int, caller, message string) {
-	fmt.Printf("%s %s %-*s | %s\n", time, level, maxLength, caller, message)
+func LogDefault(writer *os.File, time, level string, maxLength int, caller, message string) {
+	fmt.Fprintf(writer, "%s %s %-*s | %s\n", time, level, maxLength, caller, message)
 }
 
-func LogPlain(time, level string, maxLength int, caller, message string) {
-	fmt.Printf("%s\n", message)
+func LogPlain(writer *os.File, time, level string, maxLength int, caller, message string) {
+	fmt.Fprintf(writer, "%s\n", message)
 }
