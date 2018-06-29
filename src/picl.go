@@ -6,6 +6,7 @@ import (
 
 	"github.com/hauke96/kingpin"
 	"github.com/hauke96/picl/src/cmd"
+	"github.com/hauke96/picl/src/log"
 )
 
 var (
@@ -20,6 +21,12 @@ var (
 	removeCmd         = app.Command("remove", "Uninstalls/removes the given library")
 	removePackageName = removeCmd.Arg("package", "The library to remove").String()
 )
+
+func configureLogging() {
+	log.FormatFunctions[log.LOG_INFO] = log.LogPlain
+	log.FormatFunctions[log.LOG_DEBUG] = log.LogPlain
+	log.FormatFunctions[log.LOG_ERROR] = log.LogPlain
+}
 
 // When a field (e.g. configOutputFolder) is not set yet, but has been specified
 // via a command line argument, it'll be set here. Here we also overwrite
@@ -58,6 +65,8 @@ func handleInvalidRemoveConfigs() {
 }
 
 func main() {
+	configureLogging()
+
 	app.Author("Hauke Stieler")
 	app.Version("0.1")
 
