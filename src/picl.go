@@ -76,16 +76,22 @@ func handleInvalidRemoveConfigs() {
 	}
 }
 
-func main() {
-	configureLogging()
-
-	configureCliArgs()
-
+func parseCommand() string {
 	command, err := app.Parse(os.Args[1:])
+
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error while parsing arguments:\n%s\n", err)
 		os.Exit(1)
 	}
+
+	return command
+}
+
+func main() {
+	configureLogging()
+	configureCliArgs()
+
+	command := parseCommand()
 
 	readConfig(*appConfigFile)
 	setConfigFromArguments()
