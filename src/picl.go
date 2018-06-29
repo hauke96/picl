@@ -24,8 +24,6 @@ var (
 
 func configureLogging() {
 	log.FormatFunctions[log.LOG_INFO] = log.LogPlain
-	log.FormatFunctions[log.LOG_DEBUG] = log.LogPlain
-	log.FormatFunctions[log.LOG_ERROR] = log.LogPlain
 }
 
 // When a field (e.g. configOutputFolder) is not set yet, but has been specified
