@@ -26,6 +26,20 @@ func configureLogging() {
 	log.FormatFunctions[log.LOG_INFO] = log.LogPlain
 }
 
+func configureCliArgs() {
+	app.Author("Hauke Stieler")
+	app.Version("0.1")
+
+	app.CustomDescription("Package Name", `This name if the library name including the version you wan't do deal with. The name has the following format:
+
+  my-library@3.5.1
+
+There must be a name and there must be a version. The version is basically the string that is behind the "@" and is not parsed. It just has to exist on the server, but the format "x.y.z" (e.g. 3.5.1) is only recommended.`)
+
+	app.HelpFlag.Short('h')
+	app.VersionFlag.Short('v')
+}
+
 // When a field (e.g. configOutputFolder) is not set yet, but has been specified
 // via a command line argument, it'll be set here. Here we also overwrite
 // existing values (e.g. the remote URL).
@@ -65,17 +79,7 @@ func handleInvalidRemoveConfigs() {
 func main() {
 	configureLogging()
 
-	app.Author("Hauke Stieler")
-	app.Version("0.1")
-
-	app.CustomDescription("Package Name", `This name if the library name including the version you wan't do deal with. The name has the following format:
-
-      my-library@3.5.1
-
-There must be a name and there must be a version. The version is basically the string that is behind the "@" and is not parsed. It just has to exist on the server, but the format "x.y.z" (e.g. 3.5.1) is only recommended.`)
-
-	app.HelpFlag.Short('h')
-	app.VersionFlag.Short('v')
+	configureCliArgs()
 
 	command, err := app.Parse(os.Args[1:])
 	if err != nil {
