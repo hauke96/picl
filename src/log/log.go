@@ -20,9 +20,9 @@ var (
 	DateFormat string = "2006-01-02 15:04:05"
 
 	FormatFunctions map[Level]func(string, string, int, string, string) = map[Level]func(string, string, int, string, string){
-		LOG_DEBUG: logDefault,
-		LOG_INFO:  logDefault,
-		LOG_ERROR: logDefault,
+		LOG_DEBUG: LogDefault,
+		LOG_INFO:  LogDefault,
+		LOG_ERROR: LogDefault,
 	}
 
 	// The current maximum length printed for caller information. This is updated each time something gets printed
@@ -84,6 +84,10 @@ func getCallerDetails() string {
 	return caller
 }
 
-func logDefault(time, level string, maxLength int, caller, message string) {
+func LogDefault(time, level string, maxLength int, caller, message string) {
 	fmt.Printf("%s %s %-*s | %s\n", time, level, maxLength, caller, message)
+}
+
+func LogPlain(time, level string, maxLength int, caller, message string) {
+	fmt.Printf("%s\n", message)
 }
