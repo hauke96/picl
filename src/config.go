@@ -15,7 +15,7 @@ var (
 	configFileBlankLineRegex = regexp.MustCompile("^\\s*$")
 	configFileValidRegex     = regexp.MustCompile("^\\s*\\S+\\s*:\\s*\\S+\\s*$")
 
-	configOutputFolder *os.File
+	configOutputFolder *os.File // TODO turn into string and let the install() function create the folder if it doesn't exist. This also influences the CLI-parameter config
 	configRemoteUrl    *url.URL
 )
 
