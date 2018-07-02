@@ -8,6 +8,7 @@ import (
 	"github.com/hauke96/picl/src/cmd"
 	"github.com/hauke96/picl/src/log"
 	"github.com/hauke96/picl/src/pkg"
+	"github.com/hauke96/picl/src/util"
 )
 
 var (
@@ -88,13 +89,6 @@ func parseCommand() string {
 	return command
 }
 
-func exitOnError(err error) {
-	if err != nil {
-		log.Error(err.Error())
-		os.Exit(1)
-	}
-}
-
 func main() {
 	configureLogging()
 	configureCliArgs()
@@ -108,10 +102,10 @@ func main() {
 	case installCmd.FullCommand():
 		handleInvalidInstallConfigs()
 		pkg, err := pkg.ParsePackage(*installPackageName)
-		exitOnError(err)
+		util.ExitOnError(err)
 
 		err = cmd.Install(pkg, configOutputFolder, configRemoteUrl)
-		exitOnError(err)
+		util.ExitOnError(err)
 	case removeCmd.FullCommand():
 		handleInvalidRemoveConfigs()
 		fmt.Fprintf(os.Stderr, "Not implemented yet\n")
