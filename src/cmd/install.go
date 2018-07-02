@@ -22,6 +22,7 @@ func Install(pkg *pkg.Package, outputBaseFolder string, remoteBaseUrl *url.URL) 
 		return err
 	}
 
+	log.Info(fmt.Sprintf("Installation of %s finished", pkg.VersionedNameString()))
 	return nil
 }
 
@@ -39,19 +40,35 @@ func downloadMetaFile(remoteBaseUrl, outputBaseFolder, versionedPackageName stri
 	url := fmt.Sprintf("%s/%s/%s", remoteBaseUrl, versionedPackageName, "meta")
 	metaFile := fmt.Sprintf("%s/meta_%s", outputBaseFolder, versionedPackageName)
 
-	log.Info(fmt.Sprintf("Download meta-file for %s", versionedPackageName))
-	log.Debug(fmt.Sprintf("Download meta-file from %s to %s", url, metaFile))
-	return downloadFile(url, metaFile)
+	err := downloadFile(url, metaFile)
+	if err != nil {
+		return err
+	}
+
+	log.Info(fmt.Sprintf("Downloaded meta-file for %s", versionedPackageName))
+	log.Debug(fmt.Sprintf("Downloaded meta-file from %s to %s", url, metaFile))
+	return nil
 }
 
 func downloadFile(url string, fileName string) error {
+	var err error = nil
+
 	// Create output file
-	// TODO: check file existence first with io.IsExist
-	output, err := os.Create(fileName)
-	if err != nil {
-		return errors.New(fmt.Sprintf("Error while creating %s: %s", fileName, err.Error()))
+	var output *os.File = nil
+
+	// Create file if it doesn't exist
+	if _, err := os.Stat(fileName); err == nil {
+		log.Debug("Remove existing meta file")
+		os.Remove(fileName)
 	}
+
+	log.Debug("Create new meta file")
+	output, err = os.Create(fileName)
 	defer output.Close()
+
+	if err != nil {
+		return errors.New(fmt.Sprintf("Error while opening file %s: %s", fileName, err.Error()))
+	}
 
 	// Donwload data
 	response, err := http.Get(url)
