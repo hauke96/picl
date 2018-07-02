@@ -14,7 +14,7 @@ var (
 	appConfigFile = app.Flag("config", "Specifies the configuration file that should be used. This is \"./picl.conf\" by default.").Short('c').Default("./picl.conf").File()
 
 	installCmd          = app.Command("install", "Installs the given library")
-	installOutputFolder = installCmd.Flag("output", "Specifies the output folder where all libraries should be stored.").Short('o').File()
+	installOutputFolder = installCmd.Flag("output", "Specifies the output folder where all libraries should be stored.").Short('o').String()
 	installUrl          = installCmd.Flag("url", "The base url where picl downloads files from").Short('u').URL()
 	installPackageName  = installCmd.Arg("package", "The library to install").String()
 
@@ -44,7 +44,7 @@ There must be a name and there must be a version. The version is basically the s
 // via a command line argument, it'll be set here. Here we also overwrite
 // existing values (e.g. the remote URL).
 func setConfigFromArguments() {
-	if *installOutputFolder != nil {
+	if *installOutputFolder != "" {
 		configOutputFolder = *installOutputFolder
 	}
 
@@ -56,7 +56,7 @@ func setConfigFromArguments() {
 // The output folder and remote url has to be set when installing a package. This
 // function will exit with 1 when one of those is not set.
 func handleInvalidInstallConfigs() {
-	if configOutputFolder == nil {
+	if configOutputFolder == "" {
 		fmt.Fprintf(os.Stderr, "Output folder not set\n")
 		os.Exit(1)
 	}
@@ -70,7 +70,7 @@ func handleInvalidInstallConfigs() {
 // The output folder has to be set when removing a package. This function will
 // exit with 1 when it's not set.
 func handleInvalidRemoveConfigs() {
-	if configOutputFolder == nil {
+	if configOutputFolder == "" {
 		fmt.Fprintf(os.Stderr, "Output folder not set\n")
 		os.Exit(1)
 	}

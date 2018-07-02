@@ -15,7 +15,7 @@ var (
 	configFileBlankLineRegex = regexp.MustCompile("^\\s*$")
 	configFileValidRegex     = regexp.MustCompile("^\\s*\\S+\\s*:\\s*\\S+\\s*$")
 
-	configOutputFolder *os.File // TODO turn into string and let the install() function create the folder if it doesn't exist. This also influences the CLI-parameter config
+	configOutputFolder string
 	configRemoteUrl    *url.URL
 )
 
@@ -65,14 +65,7 @@ func readConfig(configFile *os.File) {
 	}
 
 	if value, ok := pairs["output_folder"]; ok {
-		filePtr, err := os.Open(value)
-
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error parsing key 'output_folder' from config\n")
-			// TODO further error handling?
-		} else {
-			configOutputFolder = filePtr
-		}
+		configOutputFolder = value
 	}
 }
 
