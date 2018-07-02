@@ -1,6 +1,7 @@
 package util
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"io"
@@ -49,4 +50,24 @@ func DownloadFile(url string, fileName string) error {
 	}
 
 	return nil
+}
+
+func ReadAllLines(file *os.File) ([]string, error) {
+	lines := make([]string, 0)
+
+	// defer closing
+	defer file.Close()
+
+	// read lines
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	// return lines or error
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+
+	return lines, nil
 }

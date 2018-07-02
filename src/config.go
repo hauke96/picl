@@ -1,13 +1,14 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"math"
 	"net/url"
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/hauke96/picl/src/util"
 )
 
 var (
@@ -20,7 +21,7 @@ var (
 )
 
 func readConfig(configFile *os.File) {
-	lines, err := readFile(configFile)
+	lines, err := util.ReadAllLines(configFile)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -67,24 +68,4 @@ func readConfig(configFile *os.File) {
 	if value, ok := pairs["output_folder"]; ok {
 		configOutputFolder = value
 	}
-}
-
-func readFile(file *os.File) ([]string, error) {
-	lines := make([]string, 0)
-
-	// defer closing
-	defer file.Close()
-
-	// read lines
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-
-	// return lines or error
-	if err := scanner.Err(); err != nil {
-		return nil, err
-	}
-
-	return lines, nil
 }
