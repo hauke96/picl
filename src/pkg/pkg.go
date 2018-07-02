@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -21,5 +22,11 @@ func ParsePackage(versionedName string) *Package {
 }
 
 func (p *Package) String() string {
+	return p.VersionedNameString()
+}
+
+// Create the raw string for this package, which is "Name@Version" (so e.g.
+// foo@1.2.3).
+func (p *Package) VersionedNameString() string {
 	return p.Name + "@" + p.Version
 }
