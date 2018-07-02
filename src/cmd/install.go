@@ -20,6 +20,11 @@ func Install(pkg *pkg.Package, outputBaseFolder string, remoteBaseUrl *url.URL) 
 		return err
 	}
 
+	err = downloadPackageFile(remoteBaseUrl.String(), outputBaseFolder, pkg)
+	if err != nil {
+		return err
+	}
+
 	log.Info(fmt.Sprintf("Installation of %s finished", pkg.VersionedNameString()))
 	return nil
 }
@@ -47,5 +52,22 @@ func downloadMetaFile(remoteBaseUrl, outputBaseFolder string, pkg *pkg.Package) 
 
 	log.Info(fmt.Sprintf("Downloaded meta-file for %s", versionedPackageName))
 	log.Debug(fmt.Sprintf("Downloaded meta-file from %s to %s", url, metaFile))
+	return nil
+}
+
+func downloadPackageFile(remoteBaseUrl, outputBaseFolder string, pkg *pkg.Package) error {
+	versionedPackageName := pkg.VersionedNameString()
+
+	// TODO Use file extension form meta file
+	url := fmt.Sprintf("%s/%s/%s", remoteBaseUrl, versionedPackageName, pkg.Name)
+	metaFile := fmt.Sprintf("%s/%s", outputBaseFolder, versionedPackageName)
+
+	err := util.DownloadFile(url, metaFile)
+	if err != nil {
+		return err
+	}
+
+	log.Info(fmt.Sprintf("Downloaded package-file for %s", versionedPackageName))
+	log.Debug(fmt.Sprintf("Downloaded package-file from %s to %s", url, metaFile))
 	return nil
 }
