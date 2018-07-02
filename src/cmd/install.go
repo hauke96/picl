@@ -12,9 +12,15 @@ import (
 func Install(pkg *pkg.Package, outputBaseFolder string, remoteBaseUrl *url.URL) {
 	log.Info("Start installing...")
 
-	// Create output dir of not exists
+	ensureOutputFolder()
+}
+
+// Create the output folder if it doesn't exist
+func ensureOutputFolder() {
 	if _, err := os.Stat(outputBaseFolder); os.IsNotExist(err) {
 		log.Info(fmt.Sprintf("Output folder %s does not exist. I'll create it...", outputBaseFolder))
+
+		// TODO FIX Permissions on new folder are 000 (instead of e.g. 644)
 		os.Mkdir(outputBaseFolder, os.ModeDir)
 	}
 }
