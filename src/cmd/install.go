@@ -20,6 +20,11 @@ func Install(pkg *pkg.Package, outputBaseFolder string, remoteBaseUrl *url.URL) 
 		return err
 	}
 
+	// TODO Parse meta file here. First extract the read-functionality from
+	// configs into the util (or other) package, because configs and meta
+	// files have the same syntax. Maybe adjust and use the config.go file
+	// to read the meta file?
+
 	err = downloadPackageFile(remoteBaseUrl.String(), outputBaseFolder, pkg)
 	if err != nil {
 		return err
