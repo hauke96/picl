@@ -56,19 +56,22 @@ func downloadFile(url string, fileName string) error {
 	// Create output file
 	var output *os.File = nil
 
-	// Create file if it doesn't exist
+	// Remove existing file
 	if _, err := os.Stat(fileName); err == nil {
-		log.Debug("Remove existing meta file")
-		os.Remove(fileName)
+		log.Debug("Remove existing file")
+		err = os.Remove(fileName)
+		if err != nil {
+			return errors.New(fmt.Sprintf("Error removing file %s: %s", fileName, err.Error()))
+		}
 	}
 
-	log.Debug("Create new meta file")
+	// Create output file
+	log.Debug("Create new file")
 	output, err = os.Create(fileName)
-	defer output.Close()
-
 	if err != nil {
-		return errors.New(fmt.Sprintf("Error while opening file %s: %s", fileName, err.Error()))
+		return errors.New(fmt.Sprintf("Error creating file %s: %s", fileName, err.Error()))
 	}
+	defer output.Close()
 
 	// Donwload data
 	response, err := http.Get(url)
