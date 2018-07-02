@@ -100,8 +100,14 @@ func main() {
 	switch command {
 	case installCmd.FullCommand():
 		handleInvalidInstallConfigs()
-		pkg := pkg.ParsePackage(*installPackageName)
-		cmd.Install(pkg, configOutputFolder, configRemoteUrl)
+		pkg, err := pkg.ParsePackage(*installPackageName)
+
+		if err == nil {
+			cmd.Install(pkg, configOutputFolder, configRemoteUrl)
+		} else {
+			log.Error(err.Error())
+			os.Exit(1)
+		}
 
 	case removeCmd.FullCommand():
 		handleInvalidRemoveConfigs()

@@ -1,7 +1,13 @@
 package pkg
 
 import (
+	"errors"
+	"regexp"
 	"strings"
+)
+
+var (
+	validStringRegex = regexp.MustCompile("^\\S+@\\S+$")
 )
 
 type Package struct {
@@ -9,15 +15,21 @@ type Package struct {
 	Version string
 }
 
-func ParsePackage(versionedName string) *Package {
-	splittedName := strings.Split(versionedName, "@")
+func IsValid(versionedName string) bool {
+	return validStringRegex.MatchString(versionedName)
+}
 
-	// TODO check if array is valid
+func ParsePackage(versionedName string) (*Package, error) {
+	if !IsValid(versionedName) {
+		return nil, errors.New("Invalid package name string '" + versionedName + "'")
+	}
+
+	splittedName := strings.Split(versionedName, "@")
 
 	return &Package{
 		Name:    splittedName[0],
 		Version: splittedName[1],
-	}
+	}, nil
 }
 
 func (p *Package) String() string {
