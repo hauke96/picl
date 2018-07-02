@@ -7,6 +7,7 @@ import (
 	"github.com/hauke96/kingpin"
 	"github.com/hauke96/picl/src/cmd"
 	"github.com/hauke96/picl/src/log"
+	"github.com/hauke96/picl/src/pkg"
 )
 
 var (
@@ -99,7 +100,8 @@ func main() {
 	switch command {
 	case installCmd.FullCommand():
 		handleInvalidInstallConfigs()
-		cmd.Install(*installPackageName, configOutputFolder, configRemoteUrl)
+		pkg := pkg.ParsePackage(*installPackageName)
+		cmd.Install(pkg, configOutputFolder, configRemoteUrl)
 
 	case removeCmd.FullCommand():
 		handleInvalidRemoveConfigs()

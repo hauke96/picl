@@ -6,9 +6,10 @@ import (
 	"os"
 
 	"github.com/hauke96/picl/src/log"
+	"github.com/hauke96/picl/src/pkg"
 )
 
-func Install(installPackageName string, outputBaseFolder string, remoteBaseUrl *url.URL) {
+func Install(pkg *pkg.Package, outputBaseFolder string, remoteBaseUrl *url.URL) {
 	log.Info("Start installing...")
 
 	// Create output dir of not exists
