@@ -61,7 +61,7 @@ func downloadFile(url string, fileName string) error {
 		log.Debug("Remove existing file")
 		err = os.Remove(fileName)
 		if err != nil {
-			return errors.New(fmt.Sprintf("Error removing file %s: %s", fileName, err.Error()))
+			return errors.New(fmt.Sprintf("Error while removing file %s: %s", fileName, err.Error()))
 		}
 	}
 
@@ -69,11 +69,12 @@ func downloadFile(url string, fileName string) error {
 	log.Debug("Create new file")
 	output, err = os.Create(fileName)
 	if err != nil {
-		return errors.New(fmt.Sprintf("Error creating file %s: %s", fileName, err.Error()))
+		return errors.New(fmt.Sprintf("Error while creating file %s: %s", fileName, err.Error()))
 	}
 	defer output.Close()
 
 	// Donwload data
+	log.Debug(fmt.Sprintf("Download data from %s", url))
 	response, err := http.Get(url)
 	if err != nil {
 		return errors.New(fmt.Sprintf("Error while donwloading %s: %s", url, err.Error()))
@@ -81,6 +82,7 @@ func downloadFile(url string, fileName string) error {
 	defer response.Body.Close()
 
 	// Write data into output File
+	log.Debug("Copy response to file")
 	_, err = io.Copy(output, response.Body)
 	if err != nil {
 		return errors.New(fmt.Sprintf("Error while copying response stream from %s to %s: %s", url, fileName, err.Error()))
