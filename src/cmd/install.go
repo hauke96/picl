@@ -12,12 +12,17 @@ import (
 	"github.com/hauke96/picl/src/pkg"
 )
 
-func Install(pkg *pkg.Package, outputBaseFolder string, remoteBaseUrl *url.URL) {
+func Install(pkg *pkg.Package, outputBaseFolder string, remoteBaseUrl *url.URL) error {
 	log.Info("Start installing...")
 
 	ensureOutputFolder(outputBaseFolder)
 
-	downloadMetaFile(remoteBaseUrl.String(), outputBaseFolder, pkg.VersionedNameString())
+	err := downloadMetaFile(remoteBaseUrl.String(), outputBaseFolder, pkg.VersionedNameString())
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Create the output folder if it doesn't exist
@@ -30,13 +35,13 @@ func ensureOutputFolder(outputBaseFolder string) {
 	}
 }
 
-func downloadMetaFile(remoteBaseUrl, outputBaseFolder, versionedPackageName string) {
+func downloadMetaFile(remoteBaseUrl, outputBaseFolder, versionedPackageName string) error {
 	url := fmt.Sprintf("%s/%s/%s", remoteBaseUrl, versionedPackageName, "meta")
 	metaFile := fmt.Sprintf("%s/meta_%s", outputBaseFolder, versionedPackageName)
 
 	log.Info(fmt.Sprintf("Download meta-file for %s", versionedPackageName))
 	log.Debug(fmt.Sprintf("Download meta-file from %s to %s", url, metaFile))
-	downloadFile(url, metaFile)
+	return downloadFile(url, metaFile)
 }
 
 func downloadFile(url string, fileName string) error {
