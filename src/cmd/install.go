@@ -12,11 +12,11 @@ import (
 func Install(pkg *pkg.Package, outputBaseFolder string, remoteBaseUrl *url.URL) {
 	log.Info("Start installing...")
 
-	ensureOutputFolder()
+	ensureOutputFolder(outputBaseFolder)
 }
 
 // Create the output folder if it doesn't exist
-func ensureOutputFolder() {
+func ensureOutputFolder(outputBaseFolder string) {
 	if _, err := os.Stat(outputBaseFolder); os.IsNotExist(err) {
 		log.Info(fmt.Sprintf("Output folder %s does not exist. I'll create it...", outputBaseFolder))
 
