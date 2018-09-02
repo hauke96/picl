@@ -109,6 +109,10 @@ func main() {
 		util.ExitOnError(err)
 	case removeCmd.FullCommand():
 		handleInvalidRemoveConfigs()
-		fmt.Fprintf(os.Stderr, "Not implemented yet\n")
+		pkg, err := pkg.ParsePackage(*removePackageName)
+		util.ExitOnError(err)
+
+		err = cmd.Remove(pkg, configOutputFolder)
+		util.ExitOnError(err)
 	}
 }
