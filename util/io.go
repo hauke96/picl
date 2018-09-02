@@ -40,6 +40,9 @@ func DownloadFile(url string, fileName string) error {
 	if err != nil {
 		return errors.New(fmt.Sprintf("Error while donwloading %s: %s", url, err.Error()))
 	}
+	if response.StatusCode != http.StatusOK {
+		return errors.New(fmt.Sprintf("Error while donwloading %s: status code was %d", url, response.StatusCode))
+	}
 	defer response.Body.Close()
 
 	// Write data into output File
