@@ -5,9 +5,9 @@ import (
 	"os"
 
 	"github.com/hauke96/kingpin"
-	"github.com/hauke96/picl/src/cmd"
-	"github.com/hauke96/picl/src/pkg"
-	"github.com/hauke96/picl/src/util"
+	"github.com/hauke96/picl/cmd"
+	"github.com/hauke96/picl/pkg"
+	"github.com/hauke96/picl/util"
 	"github.com/hauke96/sigolo"
 )
 

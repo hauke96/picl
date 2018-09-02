@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/hauke96/picl/src/util"
+	"github.com/hauke96/picl/util"
 )
 
 var (
