@@ -6,9 +6,9 @@ import (
 
 	"github.com/hauke96/kingpin"
 	"github.com/hauke96/picl/src/cmd"
-	"github.com/hauke96/picl/src/log"
 	"github.com/hauke96/picl/src/pkg"
 	"github.com/hauke96/picl/src/util"
+	"github.com/hauke96/sigolo"
 )
 
 var (
@@ -25,7 +25,7 @@ var (
 )
 
 func configureLogging() {
-	log.FormatFunctions[log.LOG_INFO] = log.LogPlain
+	sigolo.FormatFunctions[sigolo.LOG_INFO] = sigolo.LogPlain
 }
 
 func configureCliArgs() {

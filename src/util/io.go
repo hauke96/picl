@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/hauke96/picl/src/log"
+	"github.com/hauke96/sigolo"
 )
 
 func DownloadFile(url string, fileName string) error {
@@ -19,7 +19,7 @@ func DownloadFile(url string, fileName string) error {
 
 	// Remove existing file
 	if _, err := os.Stat(fileName); err == nil {
-		log.Debug("Remove existing file")
+		sigolo.Debug("Remove existing file")
 		err = os.Remove(fileName)
 		if err != nil {
 			return errors.New(fmt.Sprintf("Error while removing file %s: %s", fileName, err.Error()))
@@ -27,7 +27,7 @@ func DownloadFile(url string, fileName string) error {
 	}
 
 	// Create output file
-	log.Debug("Create new file")
+	sigolo.Debug("Create new file")
 	output, err = os.Create(fileName)
 	if err != nil {
 		return errors.New(fmt.Sprintf("Error while creating file %s: %s", fileName, err.Error()))
@@ -35,7 +35,7 @@ func DownloadFile(url string, fileName string) error {
 	defer output.Close()
 
 	// Donwload data
-	log.Debug(fmt.Sprintf("Download data from %s", url))
+	sigolo.Debug(fmt.Sprintf("Download data from %s", url))
 	response, err := http.Get(url)
 	if err != nil {
 		return errors.New(fmt.Sprintf("Error while donwloading %s: %s", url, err.Error()))
@@ -43,7 +43,7 @@ func DownloadFile(url string, fileName string) error {
 	defer response.Body.Close()
 
 	// Write data into output File
-	log.Debug("Copy response to file")
+	sigolo.Debug("Copy response to file")
 	_, err = io.Copy(output, response.Body)
 	if err != nil {
 		return errors.New(fmt.Sprintf("Error while copying response stream from %s to %s: %s", url, fileName, err.Error()))
