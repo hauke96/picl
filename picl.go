@@ -18,10 +18,10 @@ var (
 	installCmd          = app.Command("install", "Installs the given library")
 	installOutputFolder = installCmd.Flag("output", "Specifies the output folder where all libraries should be stored.").Short('o').String()
 	installUrl          = installCmd.Flag("url", "The base url where picl downloads files from").Short('u').URL()
-	installPackageName  = installCmd.Arg("package", "The library to install").String()
+	installPackageName  = installCmd.Arg("package", "The library to install").Required().String()
 
 	removeCmd         = app.Command("remove", "Uninstalls/removes the given library")
-	removePackageName = removeCmd.Arg("package", "The library to remove").String()
+	removePackageName = removeCmd.Arg("package", "The library to remove").Required().String()
 )
 
 func configureLogging() {
