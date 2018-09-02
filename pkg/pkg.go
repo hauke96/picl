@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 	"strings"
 )
@@ -40,4 +41,8 @@ func (p *Package) String() string {
 // foo@1.2.3).
 func (p *Package) VersionedNameString() string {
 	return p.Name + "@" + p.Version
+}
+
+func (p *Package) MetaFileName() string {
+	return fmt.Sprintf("meta_%s", p.VersionedNameString())
 }

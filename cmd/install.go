@@ -43,7 +43,7 @@ func downloadMetaFile(remoteBaseUrl, outputBaseFolder string, pkgObj *pkg.Packag
 	versionedPackageName := pkgObj.VersionedNameString()
 
 	url := fmt.Sprintf("%s/%s/%s", remoteBaseUrl, versionedPackageName, "meta")
-	metaFile := fmt.Sprintf("%s/meta_%s", outputBaseFolder, versionedPackageName)
+	metaFile := fmt.Sprintf("%s/%s", outputBaseFolder, pkgObj.MetaFileName())
 
 	err := util.DownloadFile(url, metaFile)
 	if err != nil {
