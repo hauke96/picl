@@ -1,2 +1,5 @@
 # Typical locations for binaries
 picl
+
+# libs folder, which is the default output folder by picl
+libs
