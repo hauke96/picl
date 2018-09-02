@@ -15,7 +15,7 @@ func Install(pkg *pkg.Package, outputBaseFolder string, remoteBaseUrl *url.URL) 
 
 	ensureOutputFolder(outputBaseFolder)
 
-	err := downloadMetaFile(remoteBaseUrl.String(), outputBaseFolder, pkg)
+	metaFile, err := downloadMetaFile(remoteBaseUrl.String(), outputBaseFolder, pkg)
 	if err != nil {
 		return err
 	}
@@ -25,7 +25,7 @@ func Install(pkg *pkg.Package, outputBaseFolder string, remoteBaseUrl *url.URL) 
 	// files have the same syntax. Maybe adjust and use the config.go file
 	// to read the meta file?
 
-	err = downloadPackageFile(remoteBaseUrl.String(), outputBaseFolder, pkg)
+	err = downloadPackageFile(remoteBaseUrl.String(), outputBaseFolder, pkg, metaFile)
 	if err != nil {
 		return err
 	}
@@ -44,35 +44,40 @@ func ensureOutputFolder(outputBaseFolder string) {
 	}
 }
 
-func downloadMetaFile(remoteBaseUrl, outputBaseFolder string, pkg *pkg.Package) error {
-	versionedPackageName := pkg.VersionedNameString()
+func downloadMetaFile(remoteBaseUrl, outputBaseFolder string, pkgObj *pkg.Package) (*pkg.MetaFile, error) {
+	versionedPackageName := pkgObj.VersionedNameString()
 
 	url := fmt.Sprintf("%s/%s/%s", remoteBaseUrl, versionedPackageName, "meta")
 	metaFile := fmt.Sprintf("%s/meta_%s", outputBaseFolder, versionedPackageName)
 
 	err := util.DownloadFile(url, metaFile)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	sigolo.Info(fmt.Sprintf("Downloaded meta-file for %s", versionedPackageName))
 	sigolo.Debug(fmt.Sprintf("Downloaded meta-file from %s to %s", url, metaFile))
-	return nil
+
+	file, err := os.Open(metaFile)
+	if err != nil {
+		return nil, fmt.Errorf("Could not open meta file %s after downloading", metaFile)
+	}
+
+	return pkg.ParseMetaFile(file)
 }
 
-func downloadPackageFile(remoteBaseUrl, outputBaseFolder string, pkg *pkg.Package) error {
+func downloadPackageFile(remoteBaseUrl, outputBaseFolder string, pkg *pkg.Package, meta *pkg.MetaFile) error {
 	versionedPackageName := pkg.VersionedNameString()
 
-	// TODO Use file extension form meta file
-	url := fmt.Sprintf("%s/%s/%s", remoteBaseUrl, versionedPackageName, pkg.Name)
-	metaFile := fmt.Sprintf("%s/%s", outputBaseFolder, versionedPackageName)
+	url := fmt.Sprintf("%s/%s/%s%s", remoteBaseUrl, versionedPackageName, versionedPackageName, meta.Ext)
+	packageFile := fmt.Sprintf("%s/%s%s", outputBaseFolder, versionedPackageName, meta.Ext)
 
-	err := util.DownloadFile(url, metaFile)
+	err := util.DownloadFile(url, packageFile)
 	if err != nil {
 		return err
 	}
 
 	sigolo.Info(fmt.Sprintf("Downloaded package-file for %s", versionedPackageName))
-	sigolo.Debug(fmt.Sprintf("Downloaded package-file from %s to %s", url, metaFile))
+	sigolo.Debug(fmt.Sprintf("Downloaded package-file from %s to %s", url, packageFile))
 	return nil
 }
