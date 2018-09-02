@@ -12,6 +12,8 @@ import (
 func Remove(pkgObj *pkg.Package, outputBaseFolder string) error {
 	sigolo.Info("Start removing...")
 
+	// TODO check if output folder exists. If not, return error
+
 	// Parse meta file
 	metaFilePath := fmt.Sprintf("%s/%s", outputBaseFolder, pkgObj.MetaFileName())
 
@@ -34,9 +36,11 @@ func Remove(pkgObj *pkg.Package, outputBaseFolder string) error {
 	// Actually remove files
 	sigolo.Info(fmt.Sprintf("Remove meta-file for %s", pkgObj.VersionedNameString()))
 	os.Remove(metaFilePath)
+	// TODO Abort on error
 
 	sigolo.Info(fmt.Sprintf("Remove package-file for %s", pkgObj.VersionedNameString()))
 	os.Remove(packageFile)
+	// TODO Abort on error
 
 	sigolo.Info(fmt.Sprintf("Removal of %s finished", pkgObj.VersionedNameString()))
 	return nil
