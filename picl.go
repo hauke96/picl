@@ -26,6 +26,7 @@ var (
 
 func configureLogging() {
 	sigolo.FormatFunctions[sigolo.LOG_INFO] = sigolo.LogPlain
+	//sigolo.LogLevel = sigolo.LOG_DEBUG
 }
 
 func configureCliArgs() {
