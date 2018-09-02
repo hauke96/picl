@@ -12,6 +12,8 @@ import (
 )
 
 var (
+	version = "0.1"
+
 	app           = kingpin.New("picl", "Maybe the dumbest package manager ever")
 	appConfigFile = app.Flag("config", "Specifies the configuration file that should be used. This is \"./picl.conf\" by default.").Short('c').Default("./picl.conf").File()
 
@@ -31,7 +33,7 @@ func configureLogging() {
 
 func configureCliArgs() {
 	app.Author("Hauke Stieler")
-	app.Version("0.1")
+	app.Version(version)
 
 	app.CustomDescription("Package Name", `This name if the library name including the version you wan't do deal with. The name has the following format:
 
