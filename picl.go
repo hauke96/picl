@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/hauke96/kingpin"
@@ -27,7 +28,10 @@ var (
 
 func configureLogging() {
 	sigolo.FormatFunctions[sigolo.LOG_INFO] = sigolo.LogPlain
-	//sigolo.LogLevel = sigolo.LOG_DEBUG
+	sigolo.FormatFunctions[sigolo.LOG_ERROR] = func(writer *os.File, time, level string, maxLength int, caller, message string) {
+		fmt.Fprintf(writer, "ERROR: %s\n", message)
+	}
+	sigolo.LogLevel = sigolo.LOG_DEBUG
 }
 
 func configureCliArgs() {
