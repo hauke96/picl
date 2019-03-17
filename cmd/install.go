@@ -25,14 +25,14 @@ func Install(pkg *pkg.Package, outputBaseFolder string, remoteBaseUrl *url.URL) 
 		return err
 	}
 
-	sigolo.Info(fmt.Sprintf("Installation of %s finished", pkg.VersionedNameString()))
+	sigolo.Info("Installation of %s finished", pkg.VersionedNameString())
 	return nil
 }
 
 // Create the output folder if it doesn't exist
 func ensureOutputFolder(outputBaseFolder string) {
 	if _, err := os.Stat(outputBaseFolder); os.IsNotExist(err) {
-		sigolo.Info(fmt.Sprintf("Output folder %s does not exist. I'll create it...", outputBaseFolder))
+		sigolo.Info("Output folder %s does not exist. I'll create it...", outputBaseFolder)
 
 		// TODO FIX Permissions on new folder are 000 (instead of e.g. 644)
 		os.Mkdir(outputBaseFolder, 0755)
@@ -50,8 +50,8 @@ func downloadMetaFile(remoteBaseUrl, outputBaseFolder string, pkgObj *pkg.Packag
 		return nil, err
 	}
 
-	sigolo.Info(fmt.Sprintf("Downloaded meta-file for %s", versionedPackageName))
-	sigolo.Debug(fmt.Sprintf("Downloaded meta-file from %s to %s", url, metaFile))
+	sigolo.Info("Downloaded meta-file for %s", versionedPackageName)
+	sigolo.Debug("Downloaded meta-file from %s to %s", url, metaFile)
 
 	file, err := os.Open(metaFile)
 	if err != nil {
@@ -72,7 +72,7 @@ func downloadPackageFile(remoteBaseUrl, outputBaseFolder string, pkg *pkg.Packag
 		return err
 	}
 
-	sigolo.Info(fmt.Sprintf("Downloaded package-file for %s", versionedPackageName))
-	sigolo.Debug(fmt.Sprintf("Downloaded package-file from %s to %s", url, packageFile))
+	sigolo.Info("Downloaded package-file for %s", versionedPackageName)
+	sigolo.Debug("Downloaded package-file from %s to %s", url, packageFile)
 	return nil
 }

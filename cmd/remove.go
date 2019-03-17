@@ -34,14 +34,14 @@ func Remove(pkgObj *pkg.Package, outputBaseFolder string) error {
 	// TODO check if package file exists. If not, print error
 
 	// Actually remove files
-	sigolo.Info(fmt.Sprintf("Remove meta-file for %s", pkgObj.VersionedNameString()))
+	sigolo.Info("Remove meta-file for %s", pkgObj.VersionedNameString())
 	os.Remove(metaFilePath)
 	// TODO Abort on error
 
-	sigolo.Info(fmt.Sprintf("Remove package-file for %s", pkgObj.VersionedNameString()))
+	sigolo.Info("Remove package-file for %s", pkgObj.VersionedNameString())
 	os.Remove(packageFile)
 	// TODO Abort on error
 
-	sigolo.Info(fmt.Sprintf("Removal of %s finished", pkgObj.VersionedNameString()))
+	sigolo.Info("Removal of %s finished", pkgObj.VersionedNameString())
 	return nil
 }

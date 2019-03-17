@@ -2,7 +2,6 @@ package util
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -22,7 +21,7 @@ func DownloadFile(url string, fileName string) error {
 		sigolo.Debug("Remove existing file")
 		err = os.Remove(fileName)
 		if err != nil {
-			return errors.New(fmt.Sprintf("Error while removing file %s: %s", fileName, err.Error()))
+			return fmt.Errorf("Error while removing file %s: %s", fileName, err.Error())
 		}
 	}
 
@@ -30,18 +29,18 @@ func DownloadFile(url string, fileName string) error {
 	sigolo.Debug("Create new file")
 	output, err = os.Create(fileName)
 	if err != nil {
-		return errors.New(fmt.Sprintf("Error while creating file %s: %s", fileName, err.Error()))
+		return fmt.Errorf("Error while creating file %s: %s", fileName, err.Error())
 	}
 	defer output.Close()
 
 	// Donwload data
-	sigolo.Debug(fmt.Sprintf("Download data from %s", url))
+	sigolo.Debug("Download data from %s", url)
 	response, err := http.Get(url)
 	if err != nil {
-		return errors.New(fmt.Sprintf("Error while donwloading %s: %s", url, err.Error()))
+		return fmt.Errorf("Error while donwloading %s: %s", url, err.Error())
 	}
 	if response.StatusCode != http.StatusOK {
-		return errors.New(fmt.Sprintf("Error while donwloading %s: status code was %d", url, response.StatusCode))
+		return fmt.Errorf("Error while donwloading %s: status code was %d", url, response.StatusCode)
 	}
 	defer response.Body.Close()
 
@@ -49,7 +48,7 @@ func DownloadFile(url string, fileName string) error {
 	sigolo.Debug("Copy response to file")
 	_, err = io.Copy(output, response.Body)
 	if err != nil {
-		return errors.New(fmt.Sprintf("Error while copying response stream from %s to %s: %s", url, fileName, err.Error()))
+		return fmt.Errorf("Error while copying response stream from %s to %s: %s", url, fileName, err.Error())
 	}
 
 	return nil
