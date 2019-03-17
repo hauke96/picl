@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/hauke96/kingpin"
@@ -62,12 +61,12 @@ func setConfigFromArguments() {
 // function will exit with 1 when one of those is not set.
 func handleInvalidInstallConfigs() {
 	if configOutputFolder == "" {
-		fmt.Fprintf(os.Stderr, "Output folder not set\n")
+		sigolo.Error("Output folder not set")
 		os.Exit(1)
 	}
 
 	if configRemoteUrl == nil {
-		fmt.Fprintf(os.Stderr, "Remote url not set\n")
+		sigolo.Error("Remote url not set")
 		os.Exit(1)
 	}
 }
@@ -76,7 +75,7 @@ func handleInvalidInstallConfigs() {
 // exit with 1 when it's not set.
 func handleInvalidRemoveConfigs() {
 	if configOutputFolder == "" {
-		fmt.Fprintf(os.Stderr, "Output folder not set\n")
+		sigolo.Error("Output folder not set")
 		os.Exit(1)
 	}
 }
@@ -85,7 +84,7 @@ func parseCommand() string {
 	command, err := app.Parse(os.Args[1:])
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error while parsing arguments:\n%s\n", err)
+		sigolo.Error("Error while parsing arguments:\n%s", err)
 		os.Exit(1)
 	}
 

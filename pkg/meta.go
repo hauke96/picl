@@ -7,6 +7,8 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/hauke96/sigolo"
+
 	"github.com/hauke96/picl/util"
 )
 
@@ -26,6 +28,7 @@ func ParseMetaFile(file *os.File) (*MetaFile, error) {
 		return nil, err
 	}
 
+	// TODO extract this parsing routine into own functions used also by config.go
 	pairs := make(map[string]string)
 
 	for i, line := range lines {
@@ -38,7 +41,7 @@ func ParseMetaFile(file *os.File) (*MetaFile, error) {
 			splittedLine := strings.SplitN(line, ":", 2)
 
 			if len(splittedLine) != 2 {
-				fmt.Fprintf(os.Stderr, "Parsing line %d failed. This could be an error in the regex, the splitting or the line itself", i)
+				sigolo.Error("Parsing line %d failed. This could be an error in the regex, the splitting or the line itself", i)
 				continue
 			}
 
@@ -50,7 +53,7 @@ func ParseMetaFile(file *os.File) (*MetaFile, error) {
 			// To print the first 20 characters of the line, we have to be careful with the bounds of this line
 			upperBound := int(math.Min(float64(len(line)), 20))
 
-			fmt.Fprintf(os.Stderr, "Malformed config-entry in line %d: %s...\n", i, line[:upperBound])
+			sigolo.Error("Malformed config-entry in line %d: %s...", i, line[:upperBound])
 		}
 	}
 

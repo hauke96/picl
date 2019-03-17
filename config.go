@@ -1,12 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"math"
 	"net/url"
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/hauke96/sigolo"
 
 	"github.com/hauke96/picl/util"
 )
@@ -23,9 +24,10 @@ var (
 func readConfig(configFile *os.File) {
 	lines, err := util.ReadAllLines(configFile)
 	if err != nil {
-		panic(err.Error())
+		sigolo.Fatal("Error reading config file: %s", err)
 	}
 
+	// TODO extract this parsing routine into own functions used also by meta.go
 	pairs := make(map[string]string)
 
 	for i, line := range lines {
@@ -38,7 +40,7 @@ func readConfig(configFile *os.File) {
 			splittedLine := strings.SplitN(line, ":", 2)
 
 			if len(splittedLine) != 2 {
-				fmt.Fprintf(os.Stderr, "Parsing line %d failed. This could be an error in the regex, the splitting or the line itself", i)
+				sigolo.Error("Parsing line %d failed. This could be an error in the regex, the splitting or the line itself", i)
 				continue
 			}
 
@@ -50,7 +52,7 @@ func readConfig(configFile *os.File) {
 			// To print the first 20 characters of the line, we have to be careful with the bounds of this line
 			upperBound := int(math.Min(float64(len(line)), 20))
 
-			fmt.Fprintf(os.Stderr, "Malformed config-entry in line %d: %s...\n", i, line[:upperBound])
+			sigolo.Error("Malformed config-entry in line %d: %s...", i, line[:upperBound])
 		}
 	}
 
@@ -58,7 +60,7 @@ func readConfig(configFile *os.File) {
 		urlPtr, err := url.Parse(value)
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error parsing key 'url' from config\n")
+			sigolo.Error("Error parsing key 'url' from config")
 			// TODO further error handling?
 		} else {
 			configRemoteUrl = urlPtr
